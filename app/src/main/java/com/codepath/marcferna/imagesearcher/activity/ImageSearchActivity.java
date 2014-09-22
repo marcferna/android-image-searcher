@@ -10,8 +10,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.GridView;
+import android.widget.ListView;
 
 import com.codepath.marcferna.imagesearcher.GoogleImageClient;
+import com.codepath.marcferna.imagesearcher.GoogleImagesAdapter;
 import com.codepath.marcferna.imagesearcher.R;
 import com.codepath.marcferna.imagesearcher.model.GoogleImage;
 
@@ -25,33 +28,33 @@ import java.util.ArrayList;
 
 public class ImageSearchActivity extends Activity {
 
+  private GoogleImagesAdapter imagesAdapter;
   private EditText etSearch;
+  private GridView gvImages;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_image_search);
+
+    gvImages = (GridView)findViewById(R.id.gvImages);
+    imagesAdapter = new GoogleImagesAdapter(this, new ArrayList<GoogleImage>());
+    gvImages.setAdapter(imagesAdapter);
+    imagesAdapter.notifyDataSetChanged();
   }
 
 
   public void onClickSearch(View searchButton) {
+    imagesAdapter.clear();
     etSearch = (EditText) findViewById(R.id.etSearch);
     String searchValue = etSearch.getText().toString();
     GoogleImageClient client = new GoogleImageClient(searchValue);
-
-    try {
-      Class[] parameterTypes = new Class[1];
-      parameterTypes[0] = ArrayList.class;
-      Method method = ImageSearchActivity.class.getMethod("populateImageGrid", parameterTypes);
-      client.search(this, method);
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
+    fetchImages(client);
   }
 
   public void populateImageGrid(ArrayList<GoogleImage> images) {
     // populate the adapter for the grid view
-    Log.i("DEBUG", "hello");
+    imagesAdapter.addAll(images);
   }
 
   @Override
@@ -64,5 +67,16 @@ public class ImageSearchActivity extends Activity {
   public void onClickSettings(MenuItem mi) {
     Intent settingsIntent = new Intent(this, SettingsActivity.class);
     startActivity(settingsIntent);
+  }
+
+  private void fetchImages(GoogleImageClient client){
+    try {
+      Class[] parameterTypes = new Class[1];
+      parameterTypes[0] = ArrayList.class;
+      Method method = ImageSearchActivity.class.getMethod("populateImageGrid", parameterTypes);
+      client.search(this, method);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
   }
 }
