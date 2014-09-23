@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridView;
@@ -36,17 +37,38 @@ public class ImageSearchActivity extends Activity {
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_image_search);
+    setupViews();
+  }
 
+  private void setupViews() {
+    setupSearchView();
+    setupGridView();
+  }
+
+  private void setupSearchView() {
+    etSearch = (EditText) findViewById(R.id.etSearch);
+  }
+
+  private void setupGridView() {
     gvImages = (GridView)findViewById(R.id.gvImages);
     imagesAdapter = new GoogleImagesAdapter(this, new ArrayList<GoogleImage>());
     gvImages.setAdapter(imagesAdapter);
     imagesAdapter.notifyDataSetChanged();
+    gvImages.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+      @Override
+      public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        Intent imageDisplayIntent = new Intent(ImageSearchActivity.this, ImageDisplayActivity.class);
+        GoogleImage image = imagesAdapter.getItem(position);
+
+        imageDisplayIntent.putExtra("image", image);
+        startActivity(imageDisplayIntent);
+      }
+    });
   }
 
 
   public void onClickSearch(View searchButton) {
     imagesAdapter.clear();
-    etSearch = (EditText) findViewById(R.id.etSearch);
     String searchValue = etSearch.getText().toString();
     GoogleImageClient client = new GoogleImageClient(searchValue);
     fetchImages(client);
