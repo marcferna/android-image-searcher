@@ -66,6 +66,8 @@ public class GoogleImageClient {
           photo.height = imageJSON.getInt("height");
           photo.googleId = imageJSON.getString("imageId");
           photo.url = imageJSON.getString("url");
+          photo.thumbUrl = imageJSON.getString("tbUrl");
+
           photo.title = imageJSON.getString("title");
           results.add(photo);
         } catch (Exception e) {

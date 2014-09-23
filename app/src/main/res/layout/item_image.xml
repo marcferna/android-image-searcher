@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+  <ImageView
+    android:layout_width="75dp"
+    android:layout_height="75dp"
+    android:id="@+id/ivGoogleImage"
+    android:scaleType="centerInside"
+    android:adjustViewBounds="true"
+    android:layout_alignParentTop="true"
+    android:layout_centerHorizontal="true"/>
+
+  <TextView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="@string/default_image_title"
+    android:id="@+id/tvImageTitle"
+    android:layout_below="@+id/ivGoogleImage"
+    android:layout_centerHorizontal="true"
+    android:maxLines="1"/>
+</RelativeLayout>

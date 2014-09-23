@@ -7,5 +7,6 @@
   <string name="hello_world">Hello world!</string>
   <string name="placeholder_image_search">Enter image search</string>
   <string name="title_search_button">Search</string>
+  <string name="default_image_title">Image Title</string>
 
 </resources>

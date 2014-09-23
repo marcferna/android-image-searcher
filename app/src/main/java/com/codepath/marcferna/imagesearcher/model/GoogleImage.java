@@ -8,6 +8,7 @@ public class GoogleImage {
   public int height;
   public String googleId;
   public String url;
+  public String thumbUrl;
   public String title;
 
 }
