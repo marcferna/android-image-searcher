@@ -1,7 +1,10 @@
 package com.codepath.marcferna.imagesearcher;
 
 import com.codepath.marcferna.imagesearcher.model.GoogleImage;
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.JsonHttpResponseHandler;
 
+import org.apache.http.Header;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -15,24 +18,39 @@ import java.util.ArrayList;
  */
 public class GoogleImageClient {
 
-  public static final String url = "https://ajax.googleapis.com/ajax/services/search/images";
+  public static final String searchUrl = "https://ajax.googleapis.com/ajax/services/search/images";
+
+  private AsyncHttpClient client;
 
   private String searchValue;
 
   public GoogleImageClient(String search) {
     searchValue = search;
+    client = new AsyncHttpClient();
+  }
+
+  private String generateUrl(String baseUrl) {
+    return baseUrl + "?q=" + searchValue + "&v=1.0" + "&rsz=8";
   }
 
   public void search(final Object object, final Method method){
-    // make the API call
+    client.get(generateUrl(searchUrl), new JsonHttpResponseHandler() {
+      @Override
+      public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+        try {
+          ArrayList<GoogleImage> images = GoogleImageClient.this.parseResponse(response);
+          method.invoke(object, images);
+        } catch(Exception e) {
+          e.printStackTrace();
+        }
+      }
 
-    JSONObject response = mockResponse();
-    ArrayList<GoogleImage> images = parseResponse(response);
-    try {
-      method.invoke(object, images);
-    } catch(Exception e) {
-      e.printStackTrace();
-    }
+      @Override
+      public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+        super.onFailure(statusCode, headers, responseString, throwable);
+      }
+    });
+
   }
 
   private ArrayList<GoogleImage> parseResponse(JSONObject response) {
@@ -60,7 +78,7 @@ public class GoogleImageClient {
     return results;
   }
 
-  private JSONObject mockResponse() {
+  private JSONObject spoofedResponse() {
     JSONObject spoofedResponse = new JSONObject();
     try {
       spoofedResponse = new JSONObject("{\"responseData\": {\"results\": [{\"GsearchResultClass\": \"GimageSearch\",\"width\": \"450\",\"height\": \"450\",\"imageId\": \"Yt3TRC1vxzhazM\",\"tbWidth\": \"127\",\"tbHeight\": \"127\",\"unescapedUrl\": \"http://www.touchnote.com/files/assets/STAN009.jpg\",\"url\": \"http://www.touchnote.com/files/assets/STAN009.jpg\",\"visibleUrl\": \"www.touchnote.com\",\"title\": \"Touchnote - Personalised \u003cb\u003eFuzzy Monkey\u003c/b\u003e greeting cards design by Dan \u003cb\u003e...\u003c/b\u003e\",\"titleNoFormatting\": \"Touchnote - Personalised Fuzzy Monkey greeting cards design by Dan ...\",\"originalContextUrl\": \"http://www.touchnote.com/photo/card-design/Fuzzy+Monkey\",\"content\": \"Card Design \u003cb\u003eFuzzy Monkey\u003c/b\u003e\",\"contentNoFormatting\": \"Card Design Fuzzy Monkey\",\"tbUrl\": \"http://images.google.com/images?q\u003dtbn:Yt3TRC1vxzhazM:www.touchnote.com/files/assets/STAN009.jpg\"}]}, \"responseDetails\": null, \"responseStatus\": 200}");
