@@ -1,5 +1,7 @@
 package com.codepath.marcferna.imagesearcher;
 
+import android.util.Log;
+
 import com.codepath.marcferna.imagesearcher.model.GoogleImage;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
@@ -9,7 +11,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.lang.reflect.Array;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 
@@ -21,19 +22,31 @@ public class GoogleImageClient {
   public static final String searchUrl = "https://ajax.googleapis.com/ajax/services/search/images";
 
   private AsyncHttpClient client;
+  private int pageSize = 8;
+  private int maxImages = 64;
 
   private String searchValue;
+  public int offset;
 
   public GoogleImageClient(String search) {
     searchValue = search;
+    offset = 0;
     client = new AsyncHttpClient();
   }
 
   private String generateUrl(String baseUrl) {
-    return baseUrl + "?q=" + searchValue + "&v=1.0" + "&rsz=8";
+    String url = baseUrl + "?q=" + searchValue + "&v=1.0" + "&rsz=" + pageSize;
+    if (this.offset > 0) {
+      url = url + "&start=" + pageSize * this.offset;
+    }
+    return url;
   }
 
   public void search(final Object object, final Method method){
+    if ((pageSize * this.offset) >= maxImages) {
+      Log.i("DEBUG", "reached 64 items");
+      return;
+    }
     client.get(generateUrl(searchUrl), new JsonHttpResponseHandler() {
       @Override
       public void onSuccess(int statusCode, Header[] headers, JSONObject response) {

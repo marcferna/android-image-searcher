@@ -14,6 +14,7 @@ import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ListView;
 
+import com.codepath.marcferna.imagesearcher.EndlessScrollListener;
 import com.codepath.marcferna.imagesearcher.GoogleImageClient;
 import com.codepath.marcferna.imagesearcher.GoogleImagesAdapter;
 import com.codepath.marcferna.imagesearcher.R;
@@ -62,6 +63,14 @@ public class ImageSearchActivity extends Activity {
 
         imageDisplayIntent.putExtra("image", image);
         startActivity(imageDisplayIntent);
+      }
+    });
+    gvImages.setOnScrollListener(new EndlessScrollListener() {
+      @Override
+      public void onLoadMore(int page, int totalItemsCount) {
+        GoogleImageClient client = new GoogleImageClient(etSearch.getText().toString());
+        client.offset = page;
+        fetchImages(client);
       }
     });
   }
