@@ -88,7 +88,7 @@ public class GoogleImageClient {
           photo.url = imageJSON.getString("url");
           photo.thumbUrl = imageJSON.getString("tbUrl");
 
-          photo.title = imageJSON.getString("title");
+          photo.title = imageJSON.getString("titleNoFormatting");
           results.add(photo);
         } catch (Exception e) {
           e.printStackTrace();
