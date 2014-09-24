@@ -3,6 +3,7 @@ package com.codepath.marcferna.imagesearcher;
 import android.util.Log;
 
 import com.codepath.marcferna.imagesearcher.model.GoogleImage;
+import com.codepath.marcferna.imagesearcher.model.Setting;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
@@ -26,12 +27,14 @@ public class GoogleImageClient {
   private int maxImages = 64;
 
   private String searchValue;
+  private Setting setting;
   public int offset;
 
-  public GoogleImageClient(String search) {
-    searchValue = search;
-    offset = 0;
-    client = new AsyncHttpClient();
+  public GoogleImageClient(String search, Setting setting) {
+    this.searchValue = search;
+    this.setting = setting;
+    this.offset = 0;
+    this.client = new AsyncHttpClient();
   }
 
   private String generateUrl(String baseUrl) {
@@ -39,6 +42,10 @@ public class GoogleImageClient {
     if (this.offset > 0) {
       url = url + "&start=" + pageSize * this.offset;
     }
+    if (!setting.size.isEmpty()) url = url + "&imgsz=" + setting.size;
+    if (!setting.color.isEmpty()) url = url + "&imgcolor=" + setting.color;
+    if (!setting.type.isEmpty()) url = url + "&imgtype=" + setting.type;
+    if (!setting.site.isEmpty()) url = url + "&as_sitesearch=" + setting.site;
     return url;
   }
 

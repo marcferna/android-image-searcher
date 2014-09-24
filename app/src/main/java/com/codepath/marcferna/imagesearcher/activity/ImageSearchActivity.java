@@ -13,12 +13,14 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.codepath.marcferna.imagesearcher.EndlessScrollListener;
 import com.codepath.marcferna.imagesearcher.GoogleImageClient;
 import com.codepath.marcferna.imagesearcher.GoogleImagesAdapter;
 import com.codepath.marcferna.imagesearcher.R;
 import com.codepath.marcferna.imagesearcher.model.GoogleImage;
+import com.codepath.marcferna.imagesearcher.model.Setting;
 
 import org.apache.http.Header;
 import org.json.JSONObject;
@@ -33,6 +35,8 @@ public class ImageSearchActivity extends Activity {
   private GoogleImagesAdapter imagesAdapter;
   private EditText etSearch;
   private GridView gvImages;
+  private Setting settings = new Setting();
+  private static int SETTINGS_ACTIVITY_CODE = 1;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -68,7 +72,7 @@ public class ImageSearchActivity extends Activity {
     gvImages.setOnScrollListener(new EndlessScrollListener() {
       @Override
       public void onLoadMore(int page, int totalItemsCount) {
-        GoogleImageClient client = new GoogleImageClient(etSearch.getText().toString());
+        GoogleImageClient client = new GoogleImageClient(etSearch.getText().toString(), settings);
         client.offset = page;
         fetchImages(client);
       }
@@ -79,7 +83,7 @@ public class ImageSearchActivity extends Activity {
   public void onClickSearch(View searchButton) {
     imagesAdapter.clear();
     String searchValue = etSearch.getText().toString();
-    GoogleImageClient client = new GoogleImageClient(searchValue);
+    GoogleImageClient client = new GoogleImageClient(searchValue, settings);
     fetchImages(client);
   }
 
@@ -97,7 +101,16 @@ public class ImageSearchActivity extends Activity {
 
   public void onClickSettings(MenuItem mi) {
     Intent settingsIntent = new Intent(this, SettingsActivity.class);
-    startActivity(settingsIntent);
+    settingsIntent.putExtra("settings", settings);
+    startActivityForResult(settingsIntent, SETTINGS_ACTIVITY_CODE);
+  }
+
+  @Override
+  protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    // REQUEST_CODE is defined above
+    if (resultCode == RESULT_OK && requestCode == SETTINGS_ACTIVITY_CODE) {
+      settings = data.getExtras().getParcelable("settings");
+    }
   }
 
   private void fetchImages(GoogleImageClient client){
