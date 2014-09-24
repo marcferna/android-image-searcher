@@ -8,22 +8,26 @@
     android:paddingBottom="@dimen/activity_vertical_margin"
     tools:context="com.codepath.marcferna.imagesearcher.activity.SettingsActivity">
 
-  <EditText
+  <Spinner
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:id="@+id/editText5"
+    android:id="@+id/spImageSize"
+    android:entries="@array/image_size_options"
+    android:spinnerMode="dialog"
+    android:prompt="@string/prompt_image_size"
     android:layout_toEndOf="@+id/tvImageTitle"
     android:layout_alignParentRight="true"
     android:layout_alignParentTop="true"
     android:layout_toRightOf="@+id/tvImageTitle"/>
 
+
   <TextView
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:textAppearance="?android:attr/textAppearanceMedium"
-    android:text="Medium Text"
+    android:text="@string/title_image_size"
     android:id="@+id/tvImageTitle"
-    android:layout_alignBottom="@id/editText5"
+    android:layout_alignBottom="@id/spImageSize"
     android:layout_alignParentLeft="true"
     android:layout_alignParentStart="true"/>
 
@@ -31,9 +35,9 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:textAppearance="?android:attr/textAppearanceMedium"
-    android:text="Medium Text"
-    android:id="@+id/textView3"
-    android:layout_alignBottom="@+id/editText6"
+    android:text="@string/title_color_filter"
+    android:id="@+id/tvColorFilter"
+    android:layout_alignBottom="@+id/spColorFilter"
     android:layout_alignParentLeft="true"
     android:layout_alignParentStart="true"/>
 
@@ -41,9 +45,9 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:textAppearance="?android:attr/textAppearanceMedium"
-    android:text="Medium Text"
-    android:id="@+id/textView4"
-    android:layout_alignBottom="@+id/editText7"
+    android:text="@string/title_image_type"
+    android:id="@+id/tvImageType"
+    android:layout_alignBottom="@+id/spImageType"
     android:layout_alignParentLeft="true"
     android:layout_alignParentStart="true"/>
 
@@ -51,39 +55,45 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:textAppearance="?android:attr/textAppearanceMedium"
-    android:text="Medium Text"
-    android:id="@+id/textView5"
-    android:layout_alignBottom="@+id/editText3"
+    android:text="@string/title_site_filter"
+    android:id="@+id/tvSiteFilter"
+    android:layout_alignBottom="@+id/etSiteFilter"
     android:layout_alignParentLeft="true"
     android:layout_alignParentStart="true"/>
 
-  <EditText
+  <Spinner
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:id="@+id/editText3"
-    android:layout_toEndOf="@+id/textView5"
-    android:layout_below="@+id/editText7"
-    android:layout_alignParentRight="true"
-    android:layout_alignParentEnd="true"/>
-
-  <EditText
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:id="@+id/editText6"
-    android:layout_below="@+id/editText5"
+    android:entries="@array/color_filter_options"
+    android:spinnerMode="dialog"
+    android:prompt="@string/prompt_color_filter"
+    android:id="@+id/spColorFilter"
+    android:layout_below="@+id/spImageSize"
     android:layout_alignParentRight="true"
     android:layout_alignParentEnd="true"
-    android:layout_toRightOf="@+id/textView3"
-    android:layout_toEndOf="@+id/textView3"/>
+    android:layout_toRightOf="@+id/tvColorFilter"
+    android:layout_toEndOf="@+id/tvColorFilter"/>
+
+  <Spinner
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:entries="@array/image_type_options"
+    android:spinnerMode="dialog"
+    android:prompt="@string/prompt_image_type"
+    android:id="@+id/spImageType"
+    android:layout_below="@+id/spColorFilter"
+    android:layout_alignRight="@+id/etSiteFilter"
+    android:layout_alignEnd="@+id/tvImageType"
+    android:layout_toRightOf="@+id/tvImageType"
+    android:layout_toEndOf="@+id/tvImageType"/>
 
   <EditText
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:id="@+id/editText7"
-    android:layout_below="@+id/editText6"
-    android:layout_alignRight="@+id/editText3"
-    android:layout_alignEnd="@+id/textView4"
-    android:layout_alignLeft="@+id/editText3"
-    android:layout_alignStart="@+id/textView4"/>
+    android:id="@+id/etSiteFilter"
+    android:layout_toEndOf="@+id/tvSiteFilter"
+    android:layout_below="@+id/spImageType"
+    android:layout_alignParentRight="true"
+    android:layout_alignParentEnd="true"/>
 
 </RelativeLayout>
